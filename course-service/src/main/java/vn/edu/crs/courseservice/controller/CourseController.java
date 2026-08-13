@@ -1,4 +1,5 @@
 package vn.edu.crs.courseservice.controller;
+
 import vn.edu.crs.courseservice.dto.CourseDTO;
 import vn.edu.crs.courseservice.service.CourseService;
 import jakarta.validation.Valid;
@@ -7,10 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
+import org.springframework.data.web.PageableDefault;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CourseController {
 
@@ -19,8 +20,9 @@ public class CourseController {
     @GetMapping
     public Page<CourseDTO> search(
             @RequestParam(required = false) String keyword,
-            Pageable pageable) {
-        return courseService.search(keyword, pageable);}
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return courseService.search(keyword, pageable);
+    }
 
     @GetMapping("/{id}")
     public CourseDTO getById(@PathVariable Long id) {

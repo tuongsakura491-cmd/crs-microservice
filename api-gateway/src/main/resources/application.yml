@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/auth/**
+
+            - id: course-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/courses/**
+
+            - id: registration-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/registrations/**
+              filters:
+                - StripPrefix=1
+            - id: course-service-partner
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/public/courses
+              filters:
+                - SetPath=/api/courses
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOriginPatterns: "*"
+                allowedMethods: "*"
+                allowedHeaders: "*"
+
+jwt:
+  secret: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
+
+partner:
+  api-key: crs-partner-key-2026
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.reactive: DEBUG
