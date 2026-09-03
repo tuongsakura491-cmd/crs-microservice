@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, type
         ReactNode } from 'react';
 import type { LoginResponse } from '../types/auth';
 interface AuthUser {
+    id: number;
     username: string;
     role: 'ADMIN' | 'STUDENT';
 }
@@ -19,7 +20,6 @@ const USER_KEY = 'crs_user';
 export function AuthProvider({ children }: { children: ReactNode })
 {
     const [user, setUser] = useState<AuthUser | null>(null);
-// Khoi phuc phien dang nhap khi F5 trang (doc lai tu localStorage)
     useEffect(() => {
         const savedUser = localStorage.getItem(USER_KEY);
         const savedToken = localStorage.getItem(TOKEN_KEY);
@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode })
     }, []);
     const login = (data: LoginResponse) => {
         localStorage.setItem(TOKEN_KEY, data.token);
-        const authUser: AuthUser = { username: data.username, role:
+        const authUser: AuthUser = {id: data.userId, username: data.username, role:
             data.role };
         localStorage.setItem(USER_KEY, JSON.stringify(authUser));
         setUser(authUser);
