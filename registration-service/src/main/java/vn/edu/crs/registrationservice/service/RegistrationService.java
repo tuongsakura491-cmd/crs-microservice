@@ -6,6 +6,7 @@ import vn.edu.crs.registrationservice.repository.RegistrationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
@@ -46,5 +47,8 @@ public class RegistrationService {
         courseClient.releaseSeat(registration.getCourseId());
         registration.setTrangThai(DA_HUY);
         registrationRepository.save(registration);
+    }
+    public List<Registration> getMyRegistrations(Long studentId) {
+        return registrationRepository.findByStudentId(studentId);
     }
 }
